@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import SearchBar from './../SearchBar/SearchBar';
 import SearchResults from './../SearchResults/SearchResults';
 import Playlist from './../Playlist/Playlist';
@@ -21,24 +20,40 @@ import './App.css';
      }
      this.addTrack = this.addTrack.bind(this);
      this.removeTrack = this.removeTrack.bind(this);
+     this.updatePlaylistName = this.updatePlaylistName.bind(this);
+     this.savePlaylist = this.savePlaylist.bind(this);
+     this.search = this.search.bind(this);
    }
   addTrack(track){
     if (-1 === this.state.playlistTracks.find({id: track.id})) {
-      this.setState({playlistTracks: track});
+      this.setState({ playlistTracks: this.state.playlistTracks.concat(track) });
     }
   }
   removeTrack(track){
-      
+    this.setState({
+      playlistTracks: this.state.playlistTracks.filter(function(check) {
+        return check.id !== track.id;
+      })
+    });
+  }
+  updatePlaylistName (name) {
+    this.setState({playlistName: name});
+  }
+  savePlaylist(){
+    let trackURIs = this.state.playlistTracks.map(track=>{return track.uri;})
+  }
+  search(term){
+    console.log(term);
   }
   render() {
     return (
       <div>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
         <div className="App">
-          <SearchBar />
+          <SearchBar onSearch={this.search} />
           <div className="App-playlist">
             <SearchResults onAdd={this.addTrack} searchResults={this.state.searchResults} />
-            <Playlist onRemove={this.removeTrack} playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} />
+            <Playlist onSave={this.savePlaylist} onNameChange={this.updatePlaylistName} onRemove={this.removeTrack} playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} />
           </div>
         </div>
       </div>
