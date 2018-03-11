@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import './Track.css';
 
-class Track extends Component {
+class Track extends React.Component {
   constructor(props){
     super(props);
     this.addTrack = this.addTrack.bind(this);
