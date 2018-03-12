@@ -29,7 +29,7 @@ import './App.css';
      this.search = this.search.bind(this);
    }
   addTrack(track){
-    if (-1 === this.state.playlistTracks.find({id: track.id})) {
+    if (-1 === this.state.playlistTracks.indexOf(track.id)) {
       this.setState({ playlistTracks: this.state.playlistTracks.concat(track)});
     }
   }
@@ -48,14 +48,14 @@ import './App.css';
     Spotify.savePlaylist(this.state.playlistName, trackURIs);
     this.setState({
       playlistName: '',
-      searchResults: []
+      searchResults: [],
+      playlistTracks: [],
     });
   }
   search(term){
     Spotify.search(term).then(searchResults => {
       this.setState({searchResults: searchResults});
     });
-    console.log(this.state.searchResults);
   }
   render() {
     return (
@@ -64,8 +64,15 @@ import './App.css';
         <div className="App">
           <SearchBar onSearch={this.search} />
           <div className="App-playlist">
-            <SearchResults onAdd={this.addTrack} searchResults={this.state.searchResults} />
-            <Playlist onSave={this.savePlaylist} onNameChange={this.updatePlaylistName} onRemove={this.removeTrack} playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} />
+            <SearchResults
+              onAdd={this.addTrack}
+              searchResults={this.state.searchResults} />
+            <Playlist
+              onSave={this.savePlaylist}
+              onNameChange={this.updatePlaylistName}
+              onRemove={this.removeTrack}
+              playlistName={this.state.playlistName}
+              playlistTracks={this.state.playlistTracks} />
           </div>
         </div>
       </div>
